@@ -1,4 +1,5 @@
-const project = [];
+
+let project = [];
 
 const todoproject = {
   name : "todoproject",
@@ -21,15 +22,19 @@ todoproject.todo.push(todoitem1);
 //select todoo-list from the main content in indei.html
 
 const list = document.querySelector("#todo-list");
-
-for (let i = 0; i < todoproject.todo.length; i++) {
-  
-  const todo = todoproject.todo[i];
-  const li = document.createElement("li");
-  li.textContent = `${todo.title} - Due: ${todo.dueDate}`;
-  
-  list.appendChild(li);
+//render todos
+function renderTodos() {
+  list.textContent = ""; // clear existing list
+  project.forEach(proj => {
+    proj.todo.forEach(todo => {
+      const li = document.createElement("li");
+      li.textContent = `${todo.title} - Due: ${todo.dueDate}`;
+      list.appendChild(li);
+    });
+  });
 }
+
+renderTodos();
 
 //add to do manually 
 
@@ -53,21 +58,17 @@ addbtn.addEventListener("click",  () => {
   
   //making sure new todos are saved to local storage 
 
-  const updatedprojects = project;
+localStorage.setItem("projectdata", JSON.stringify(project));
 
-localStorage.setItem("projectdata", JSON.stringify(updatedProjects));
-
-  newlist = document.createElement("li");
-  newlist.textContent = `${newTodo.title} - Due: ${newTodo.dueDate}`;
+  renderTodos();
   
-  list.appendChild(newlist)
   
 });
 
 
 // saved projects from local storage 
 
-const savedproject = localStorage.getitem("projectdata") ;
+const savedproject = localStorage.getItem("projectdata") ;
 
 if (savedproject) {
   project = JSON.parse(savedproject)
